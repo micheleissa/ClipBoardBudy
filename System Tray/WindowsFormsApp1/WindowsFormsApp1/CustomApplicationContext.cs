@@ -51,18 +51,29 @@ namespace WindowsFormsApp1
         {
             throw new NotImplementedException();
         }
-
+        private Form form;
         private void ContextMenuStrip_Opening(object sender, CancelEventArgs e)
         {
             e.Cancel = false;
             notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
             //notifyIcon.ContextMenuStrip.Items.Add(ToolStripMenuItemWithHandler("Show &Details", showDetailsItem_Click));
             //notifyIcon.ContextMenuStrip.Items.Add(ToolStripMenuItemWithHandler("&Help/About", showHelpItem_Click));
-            notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
+//            notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
             notifyIcon.ContextMenuStrip.Items.Add(ToolStripMenuItemWithHandler("&Exit", exitItem_Click));
+            notifyIcon.ContextMenuStrip.Items.Add(ToolStripMenuItemWithHandler("&Show", showItem_Click));
         }
 
-
+        private void showItem_Click(object sender, EventArgs e)
+            {
+            if(form == null)
+                {
+                form = new Form {Visible = true};
+                }
+            else
+                {
+                form.Activate();
+                }
+            }
         private void exitItem_Click(object sender, EventArgs e)
         {
             ExitThread();
