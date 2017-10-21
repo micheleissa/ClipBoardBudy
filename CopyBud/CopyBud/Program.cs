@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace ClipBoardBudy
+namespace CopyBud
 {
     static class Program
         {

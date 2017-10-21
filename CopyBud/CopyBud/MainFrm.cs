@@ -1,29 +1,20 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows.Forms;
-using WindowsFormsApp1.Win32;
+using CopyBud.Win32;
 
-namespace ClipBoardBudy
+namespace CopyBud
 {
     public class MainForm : System.Windows.Forms.Form
     {
         private RichTextBox ctlClipboardText;
-        //private System.ComponentModel.IContainer components;
         private IntPtr _ClipboardViewerNext;
 
-    private FormWindowState _lastState;
-    private const int SC_MINIMIZE = 0xF020;
+        private FormWindowState _lastState;
+        private const int SC_MINIMIZE = 0xF020;
 
-    public FormWindowState LastState => _lastState;
-
-//        [STAThread]
-//        static void Main()
-//        {
-//            Application.EnableVisualStyles();
-//            Application.SetCompatibleTextRenderingDefault(false);
-//            Application.Run(new MainFrm());
-//        }
-    private void MainFrm_Load(object sender, System.EventArgs e)
+        public FormWindowState LastState => _lastState;
+        private void MainFrm_Load(object sender, System.EventArgs e)
         {
             RegisterClipboardViewer();
         }
@@ -43,8 +34,6 @@ namespace ClipBoardBudy
             // IDataObject interface
             //
             IDataObject iData = new DataObject();
-            string strText = "clipmon";
-
             try
             {
                 iData = Clipboard.GetDataObject();
@@ -60,59 +49,13 @@ namespace ClipBoardBudy
                 MessageBox.Show(ex.ToString());
                 return;
             }
-
             // 
-            // Get RTF if it is present
+            // Get RTF/Text if it is present
             //
             if (iData.GetDataPresent(DataFormats.Rtf) || iData.GetDataPresent(DataFormats.Text))
             {
-            ctlClipboardText.Text += $"{(string)iData.GetData(DataFormats.Text)}{Environment.NewLine}";
+                ctlClipboardText.Text += $"{(string)iData.GetData(DataFormats.Text)}{Environment.NewLine}";
             }
-            else
-            {
-//                // 
-//                // Get Text if it is present
-//                //
-//                if ()
-//                {
-//                    ctlClipboardText.Text += $"{(string)iData.GetData(DataFormats.Text)}{System.Environment.NewLine}";
-//
-//                    strText = "Text";
-//
-//                    Debug.WriteLine((string)iData.GetData(DataFormats.Text));
-//                }
-//                else
-//                {
-//                    //
-//                    // Only show RTF or TEXT
-//                    //
-//                    ctlClipboardText.Text = "(cannot display this format)";
-//                }
-            }
-
-            //notAreaIcon.Tooltip = strText;
-
-            //if (ClipboardSearch(iData))
-            //{
-            //    //
-            //    // Found some new links
-            //    //
-            //    System.Text.StringBuilder strBalloon = new System.Text.StringBuilder(100);
-
-            //    foreach (string objLink in _hyperlink)
-            //    {
-            //        strBalloon.Append(objLink.ToString() + "\n");
-            //    }
-
-            //    FormatMenuBuild(iData);
-            //    SupportedMenuBuild(iData);
-            //    ContextMenuBuild();
-
-            //    if (_hyperlink.Count > 0)
-            //    {
-            //        notAreaIcon.BalloonDisplay(NotificationAreaIcon.NOTIFYICONdwInfoFlags.NIIF_INFO, "Links", strBalloon.ToString());
-            //    }
-            //}
         }
 
         protected override void WndProc(ref Message m)
@@ -125,7 +68,7 @@ namespace ClipBoardBudy
                 // clipboard changes. This enables a clipboard viewer 
                 // window to display the new content of the clipboard. 
                 //
-                case WindowsFormsApp1.Win32.Msgs.WM_DRAWCLIPBOARD:
+                case Msgs.WM_DRAWCLIPBOARD:
 
                     Debug.WriteLine("WindowProc DRAWCLIPBOARD: " + m.Msg, "WndProc");
 
@@ -136,7 +79,7 @@ namespace ClipBoardBudy
                     // must call the SendMessage function to pass the message 
                     // on to the next window in the clipboard viewer chain.
                     //
-                    User32.SendMessage(_ClipboardViewerNext, m.Msg, m.WParam, m.LParam);
+                    User32Wrapper.SendMessage(_ClipboardViewerNext, m.Msg, m.WParam, m.LParam);
                     break;
 
 
@@ -170,16 +113,9 @@ namespace ClipBoardBudy
                     }
                     else
                     {
-                        User32.SendMessage(_ClipboardViewerNext, m.Msg, m.WParam, m.LParam);
+                        User32Wrapper.SendMessage(_ClipboardViewerNext, m.Msg, m.WParam, m.LParam);
                     }
                     break;
-//                case Msgs.WM_SYSCOMMAND:
-//                    var cmd = m.WParam.ToInt32() & 0xfff0;
-//                    if(cmd == SC_MINIMIZE)
-//                        {
-//                        this.Visible = false;
-//                        }
-//                    break;
                 default:
                     //
                     // Let the form process the messages that we are
@@ -199,7 +135,7 @@ namespace ClipBoardBudy
         /// </summary>
         private void RegisterClipboardViewer()
         {
-            _ClipboardViewerNext = User32.SetClipboardViewer(this.Handle);
+            _ClipboardViewerNext = User32Wrapper.SetClipboardViewer(this.Handle);
         }
 
         /// <summary>
@@ -207,7 +143,7 @@ namespace ClipBoardBudy
         /// </summary>
         private void UnregisterClipboardViewer()
         {
-            User32.ChangeClipboardChain(this.Handle, _ClipboardViewerNext);
+            User32Wrapper.ChangeClipboardChain(this.Handle, _ClipboardViewerNext);
         }
         public MainForm()
         {
@@ -216,39 +152,39 @@ namespace ClipBoardBudy
             InitializeComponent();
         }
 
-       
+
 
 
         private void InitializeComponent()
         {
-            this.ctlClipboardText = new System.Windows.Forms.RichTextBox();
+            this.ctlClipboardText = new RichTextBox();
             this.SuspendLayout();
             // 
             // ctlClipboardText
             // 
             this.ctlClipboardText.Location = new System.Drawing.Point(0, 0);
             this.ctlClipboardText.Name = "ctlClipboardText";
-            this.ctlClipboardText.Size = new System.Drawing.Size(432, 260);
+            this.ctlClipboardText.Size = new System.Drawing.Size(721, 371);
             this.ctlClipboardText.TabIndex = 0;
             this.ctlClipboardText.Text = "";
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.MinimizeBox = false;
-            this.MaximizeBox = false;
             // 
             // MainForm
             // 
-            this.ClientSize = new System.Drawing.Size(432, 260);
+            this.ClientSize = new System.Drawing.Size(722, 462);
             this.Controls.Add(this.ctlClipboardText);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "MainForm";
-            this.FormClosing += this.MainFrm_FormClosing;
-            this.Load += this.MainFrm_Load;
+            this.Text = "History";
+            this.FormClosing += new FormClosingEventHandler(this.MainFrm_FormClosing);
+            this.Load += new EventHandler(this.MainFrm_Load);
             this.ResumeLayout(false);
-
         }
 
         private void MainFrm_FormClosing(object sender, FormClosingEventArgs e)
-            {
+        {
             UnregisterClipboardViewer();
-            }
+        }
     }
 }

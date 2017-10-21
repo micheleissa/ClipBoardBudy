@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{3C305DE3-AFC7-4F79-9AA0-1EAC099ADA89}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>ClipBoardBudy</RootNamespace>
-    <AssemblyName>ClipBoardBudy</AssemblyName>
+    <RootNamespace>CopyBud</RootNamespace>
+    <AssemblyName>CopyBud</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

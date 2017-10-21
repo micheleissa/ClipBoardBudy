@@ -4,14 +4,14 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace ClipBoardBudy
+namespace CopyBud
 {
     public class CustomApplicationContext : ApplicationContext
         {
         private IContainer _components;
         private NotifyIcon _notifyIcon;
         private static readonly string IconFileName = "copy.ico";
-        private static readonly string DefaultTooltip = "ClipBoardBudy";
+        private static readonly string DefaultTooltip = "CopyBud";
         private MainForm mainFrm;
         public CustomApplicationContext()
             {
@@ -27,14 +27,13 @@ namespace ClipBoardBudy
                 Text = DefaultTooltip,
                 Visible = true
                 };
-            //            _notifyIcon.ContextMenuStrip.Opening += ContextMenuStrip_Opening;
-            _notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
             var exitMenuItem = new ToolStripMenuItem("&Exit");
-            exitMenuItem.Click += exitItem_Click;
             var showHideMenuItem = new ToolStripMenuItem("&Show");
+            exitMenuItem.Click += exitItem_Click;
             showHideMenuItem.Click += showItem_Click;
-            _notifyIcon.ContextMenuStrip.Items.Add(exitMenuItem);
             _notifyIcon.ContextMenuStrip.Items.Add(showHideMenuItem);
+            _notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
+            _notifyIcon.ContextMenuStrip.Items.Add(exitMenuItem);
             _notifyIcon.DoubleClick += notifyIcon_DoubleClick;
             _notifyIcon.MouseUp += notifyIcon_MouseUp;
             }

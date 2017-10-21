@@ -1,2 +1,2 @@
-# ClipBoardBudy
-Clipbaord Manager
+# CopyBud
+Clipboard Manager

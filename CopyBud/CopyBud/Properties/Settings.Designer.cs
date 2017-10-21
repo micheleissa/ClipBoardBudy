@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ClipBoardBudy.Properties {
+namespace CopyBud.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

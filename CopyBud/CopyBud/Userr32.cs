@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace WindowsFormsApp1.Win32
+namespace CopyBud.Win32
 {
-    public delegate int WindowProcDelegate(IntPtr hw, IntPtr uMsg, IntPtr wParam, IntPtr lParam);
-
 
     /// <summary>
-    /// Windows User32 DLL declarations
+    /// Windows User32Wrapper DLL declarations
     /// </summary>
-    public class User32
+    public class User32Wrapper
     {
         [DllImport("User32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr SetClipboardViewer(IntPtr hWnd);
