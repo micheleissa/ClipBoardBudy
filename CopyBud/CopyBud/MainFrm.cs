@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Windows.Forms;
 using CopyBud.Win32;
+using Persistence;
+using System.Linq;
 
 namespace CopyBud
 {
@@ -10,6 +12,7 @@ namespace CopyBud
         private RichTextBox ctlClipboardText;
         private IntPtr _ClipboardViewerNext;
         private const int SC_MINIMIZE = 0xF020;
+        private readonly HistoryRepository _historyRepository;
 
         private void MainFrm_Load(object sender, System.EventArgs e)
         {
@@ -51,10 +54,19 @@ namespace CopyBud
             //
             if (iData.GetDataPresent(DataFormats.Rtf) || iData.GetDataPresent(DataFormats.Text))
             {
-                ctlClipboardText.Text += $"{(string)iData.GetData(DataFormats.Text)}{Environment.NewLine}";
+                var lastClipboard = (string)iData.GetData(DataFormats.Text);
+                if (!_historyRepository.DoesHistoryExist(lastClipboard))
+                {
+                    ctlClipboardText.Text += $"{lastClipboard}{Environment.NewLine}";
+                    _historyRepository.AddHistory((string)iData.GetData(DataFormats.Text));
+                }
+
             }
         }
-
+        public void ClearControls()
+        {
+            this.ctlClipboardText.Text = "";
+        }
         protected override void WndProc(ref Message m)
         {
             switch ((Msgs)m.Msg)
@@ -118,8 +130,6 @@ namespace CopyBud
                     // Let the form process the messages that we are
                     // not interested in
                     //
-                    Debug.WriteLine("WM_CHANGECBCHAIN: lParam: " + m.LParam, "WndProc");
-                    Debug.WriteLine("WM_CHANGECBCHAIN: WParam: " + m.WParam, "WndProc");
                     base.WndProc(ref m);
                     break;
 
@@ -142,8 +152,9 @@ namespace CopyBud
         {
             User32Wrapper.ChangeClipboardChain(this.Handle, _ClipboardViewerNext);
         }
-        public MainForm()
+        public MainForm(HistoryRepository historyRepository)
         {
+            this._historyRepository = historyRepository;
             this.ctlClipboardText = new RichTextBox();
             this.ClientSize = new System.Drawing.Size(292, 266);
             InitializeComponent();
@@ -164,6 +175,8 @@ namespace CopyBud
             this.ctlClipboardText.Size = new System.Drawing.Size(721, 371);
             this.ctlClipboardText.TabIndex = 0;
             this.ctlClipboardText.Text = "";
+            var recentHistory = _historyRepository.GetRecentHistory();
+            recentHistory.ToList().ForEach(h => this.ctlClipboardText.Text += $"{ h.ClipString} {Environment.NewLine}");
             // 
             // MainForm
             // 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
+using Persistence;
 
 namespace CopyBud
 {
@@ -13,10 +14,11 @@ namespace CopyBud
         static void Main()
             {
             var ctx = new DataContext();
-            var histories = ctx.histories.ToList();
+            //ctx.Database.Log = Console.Write;
+            var historyRepo = new HistoryRepository(ctx);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new CustomApplicationContext());
+            Application.Run(new CustomApplicationContext(historyRepo));
             }
         }
 }
