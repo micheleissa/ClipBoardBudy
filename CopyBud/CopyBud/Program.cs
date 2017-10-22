@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace CopyBud
@@ -11,6 +12,8 @@ namespace CopyBud
         [STAThread]
         static void Main()
             {
+            var ctx = new DataContext();
+            var histories = ctx.histories.ToList();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new CustomApplicationContext());

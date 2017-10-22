@@ -9,11 +9,8 @@ namespace CopyBud
     {
         private RichTextBox ctlClipboardText;
         private IntPtr _ClipboardViewerNext;
-
-        private FormWindowState _lastState;
         private const int SC_MINIMIZE = 0xF020;
 
-        public FormWindowState LastState => _lastState;
         private void MainFrm_Load(object sender, System.EventArgs e)
         {
             RegisterClipboardViewer();

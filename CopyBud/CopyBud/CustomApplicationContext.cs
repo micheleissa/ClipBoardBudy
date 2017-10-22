@@ -61,7 +61,6 @@ namespace CopyBud
             else
                 {
                 mainFrm.Visible = true;
-                mainFrm.WindowState = mainFrm.LastState;
                 }
             }
 
