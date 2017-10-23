@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Persistence
 {
@@ -34,13 +31,7 @@ namespace Persistence
 
         public void DeleteAll()
         {
-            //_dataContext.Histories.RemoveRange(_dataContext.Histories.Select(h => h));  
             _dataContext.Database.ExecuteSqlCommand("DELETE FROM HISTORY");
-            var historySeq = _dataContext.Sequences.FirstOrDefault(s => s.Name == nameof(History));
-            if(historySeq != null)
-            {
-                historySeq.Seq = 0;
-            }
             _dataContext.SaveChanges();
         }
     }

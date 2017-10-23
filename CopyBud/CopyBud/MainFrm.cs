@@ -37,36 +37,32 @@ namespace CopyBud
             try
             {
                 iData = Clipboard.GetDataObject();
-            }
-            catch (System.Runtime.InteropServices.ExternalException externEx)
-            {
-                // Copying a field definition in Access 2002 causes this sometimes?
-                Debug.WriteLine("InteropServices.ExternalException: {0}", externEx.Message);
-                return;
+                // 
+                // Get RTF/Text if it is present
+                //
+                if (iData.GetDataPresent(DataFormats.Rtf) || iData.GetDataPresent(DataFormats.Text))
+                {
+                    var lastClipboard = (string)iData.GetData(DataFormats.Text);
+                    if (!_historyRepository.DoesHistoryExist(lastClipboard))
+                    {
+                        ctlClipboardText.Text += $"{lastClipboard}{Environment.NewLine}";
+                        _historyRepository.AddHistory((string)iData.GetData(DataFormats.Text));
+                    }
+
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show($"Error has occurred: {ex}");
                 return;
             }
-            // 
-            // Get RTF/Text if it is present
-            //
-            if (iData.GetDataPresent(DataFormats.Rtf) || iData.GetDataPresent(DataFormats.Text))
-            {
-                var lastClipboard = (string)iData.GetData(DataFormats.Text);
-                if (!_historyRepository.DoesHistoryExist(lastClipboard))
-                {
-                    ctlClipboardText.Text += $"{lastClipboard}{Environment.NewLine}";
-                    _historyRepository.AddHistory((string)iData.GetData(DataFormats.Text));
-                }
-
-            }
+            
         }
         public void ClearControls()
         {
             this.ctlClipboardText.Text = "";
         }
+        //Taken from https://stackoverflow.com/questions/621577/clipboard-event-c-sharp
         protected override void WndProc(ref Message m)
         {
             switch ((Msgs)m.Msg)
@@ -175,8 +171,16 @@ namespace CopyBud
             this.ctlClipboardText.Size = new System.Drawing.Size(721, 371);
             this.ctlClipboardText.TabIndex = 0;
             this.ctlClipboardText.Text = "";
-            var recentHistory = _historyRepository.GetRecentHistory();
-            recentHistory.ToList().ForEach(h => this.ctlClipboardText.Text += $"{ h.ClipString} {Environment.NewLine}");
+            try
+            {
+                var recentHistory = _historyRepository.GetRecentHistory();
+                recentHistory.ToList().ForEach(h => this.ctlClipboardText.Text += $"{ h.ClipString} {Environment.NewLine}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error has occurred: {ex}");
+            }
+            
             // 
             // MainForm
             // 

@@ -53,7 +53,15 @@ namespace CopyBud
             var result = MessageBox.Show("Are you sure you want to clear the history? This action is not reversible. ", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if(result == DialogResult.Yes)
             {
-                _historyRepository.DeleteAll();   
+                try
+                {
+                    _historyRepository.DeleteAll();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error has occurred: {ex}");
+                }
+
                 if (mainFrm != null && !mainFrm.IsDisposed)
                 {
                     mainFrm.ClearControls();
