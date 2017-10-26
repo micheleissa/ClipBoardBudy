@@ -6,8 +6,8 @@ namespace CopyBud.Persistence
 {
     public class DataContext : DbContext
     {
-        public DbSet<History> Histories { get; set; }
-        public DbSet<SequenceTable> Sequences { get; set; }
+        public virtual DbSet<History> Histories { get; set; }
+        public virtual DbSet<SequenceTable> Sequences { get; set; }
 
         public DataContext() : base("dbConnection")
         {

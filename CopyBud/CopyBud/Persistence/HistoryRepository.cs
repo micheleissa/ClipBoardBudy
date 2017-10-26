@@ -6,6 +6,7 @@ namespace CopyBud.Persistence
     public class HistoryRepository
     {
         private readonly DataContext _dataContext;
+
         public HistoryRepository(DataContext ctx)
         {
             _dataContext = ctx;
