@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Linq;
 
-namespace Persistence
+namespace CopyBud.Persistence
 {
     public class HistoryRepository
     {

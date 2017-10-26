@@ -1,8 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
+﻿using System.Data.Entity;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration.Conventions;
 
-namespace Persistence
+namespace CopyBud.Persistence
 {
     public class DataContext : DbContext
     {

@@ -2,8 +2,8 @@
 using System.Diagnostics;
 using System.Windows.Forms;
 using CopyBud.Win32;
-using Persistence;
 using System.Linq;
+using CopyBud.Persistence;
 
 namespace CopyBud
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Persistence
+namespace CopyBud.Persistence
 {
     public class History
     {

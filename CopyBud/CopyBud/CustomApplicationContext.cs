@@ -1,9 +1,10 @@
-﻿using Persistence;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
+using CopyBud.Persistence;
+using CopyBud.Properties;
 
 namespace CopyBud
 {
@@ -14,7 +15,7 @@ namespace CopyBud
         private static readonly string IconFileName = "copy.ico";
         private static readonly string DefaultTooltip = "CopyBud";
         private readonly HistoryRepository _historyRepository;
-        private MainForm mainFrm;
+        private MainForm _mainFrm;
         public CustomApplicationContext( HistoryRepository historyRepo )
             {
             this._historyRepository = historyRepo;
@@ -42,7 +43,7 @@ namespace CopyBud
             _notifyIcon.ContextMenuStrip.Items.Add(exitMenuItem);
             _notifyIcon.DoubleClick += notifyIcon_DoubleClick;
             _notifyIcon.MouseUp += notifyIcon_MouseUp;
-            mainFrm = new MainForm(_historyRepository)
+            _mainFrm = new MainForm(_historyRepository)
             {
                 Visible = false
             };
@@ -50,7 +51,7 @@ namespace CopyBud
 
         private void ClearHistoryMenuItem_Click(object sender, EventArgs e)
         {
-            var result = MessageBox.Show("Are you sure you want to clear the history? This action is not reversible. ", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            var result = MessageBox.Show(Resources.ClearHistory, Resources.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if(result == DialogResult.Yes)
             {
                 try
@@ -59,12 +60,12 @@ namespace CopyBud
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error has occurred: {ex}");
+                    MessageBox.Show(string.Format( Resources.ErrorStatic, ex ));
                 }
 
-                if (mainFrm != null && !mainFrm.IsDisposed)
+                if (_mainFrm != null && !_mainFrm.IsDisposed)
                 {
-                    mainFrm.ClearControls();
+                    _mainFrm.ClearControls();
                 }
             }
         }
@@ -85,16 +86,16 @@ namespace CopyBud
 
         private void ShowItem_Click( object sender, EventArgs e )
             {
-            if(mainFrm == null || mainFrm.IsDisposed)
+            if(_mainFrm == null || _mainFrm.IsDisposed)
                 {
-                mainFrm = new MainForm(_historyRepository)
+                _mainFrm = new MainForm(_historyRepository)
                                 {
                                 Visible = true
                                 };
                 }
             else
                 {
-                mainFrm.Visible = true;
+                _mainFrm.Visible = true;
                 }
             }
 

@@ -21,6 +21,33 @@ namespace CopyBud.Win32
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern int SendMessage(IntPtr hwnd, int wMsg, IntPtr wParam, IntPtr lParam);
 
+
+        [DllImport("user32")]
+        public static extern int RegisterWindowMessage(string message);
+
+        internal static int RegisterWindowMessage(string format, params object[] args)
+        {
+            var message = string.Format(format, args);
+            return RegisterWindowMessage(message);
+        }
+
+        internal const int HWND_BROADCAST = 0xffff;
+        internal const int SW_SHOWNORMAL = 1;
+
+        [DllImport("user32")]
+        public static extern bool PostMessage(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam);
+
+        [DllImportAttribute("user32.dll")]
+        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        [DllImportAttribute("user32.dll")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        internal static void ShowToFront(IntPtr window)
+        {
+            ShowWindow(window, SW_SHOWNORMAL);
+            SetForegroundWindow(window);
+        }
     }
 
     /// <summary>

@@ -8,4 +8,3 @@ When you compile the source code for the first time mark **data.db** to copy if 
 * Search History.
 * Save History As.
 * Logging.
-* One Application Instance.

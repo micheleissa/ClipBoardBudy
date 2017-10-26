@@ -114,4 +114,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ClearHistory" xml:space="preserve">
+    <value>Are you sure you want to clear the history? This action is not reversible. </value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="ErrorStatic" xml:space="preserve">
+    <value>Error has occurred: {0}</value>
+  </data>
 </root>
