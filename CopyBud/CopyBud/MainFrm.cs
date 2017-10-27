@@ -4,28 +4,25 @@ using System.Windows.Forms;
 using CopyBud.Win32;
 using System.Linq;
 using CopyBud.Persistence;
+using CopyBud.Properties;
 
 namespace CopyBud
 {
-    public class MainForm : System.Windows.Forms.Form
+    public class MainForm : Form
     {
         private RichTextBox ctlClipboardText;
         private IntPtr _ClipboardViewerNext;
         private const int SC_MINIMIZE = 0xF020;
         private readonly HistoryRepository _historyRepository;
+        private bool _historyCleared;
 
-        private void MainFrm_Load(object sender, System.EventArgs e)
+    private void MainFrm_Load(object sender, EventArgs e)
         {
             RegisterClipboardViewer();
         }
 
-        private void frmMain_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            UnregisterClipboardViewer();
-        }
         /// <summary>
         /// Show the clipboard contents in the window 
-        /// and show the notification balloon if a link is found
         /// </summary>
         private void GetClipboardData()
         {
@@ -43,7 +40,7 @@ namespace CopyBud
                 if (iData.GetDataPresent(DataFormats.Rtf) || iData.GetDataPresent(DataFormats.Text))
                 {
                     var lastClipboard = (string)iData.GetData(DataFormats.Text);
-                    if (!_historyRepository.DoesHistoryExist(lastClipboard))
+                    if (!_historyRepository.DoesHistoryExist(lastClipboard) && !_historyCleared)
                     {
                         ctlClipboardText.Text += $"{lastClipboard}{Environment.NewLine}";
                         _historyRepository.AddHistory((string)iData.GetData(DataFormats.Text));
@@ -53,15 +50,16 @@ namespace CopyBud
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error has occurred: {ex}");
-                return;
+                MessageBox.Show(string.Format(Resources.ErrorStatic, ex));
             }
-            
+
         }
         public void ClearControls()
         {
             this.ctlClipboardText.Text = "";
+            this._historyCleared = true;
         }
+
         //Taken from https://stackoverflow.com/questions/621577/clipboard-event-c-sharp
         protected override void WndProc(ref Message m)
         {
@@ -148,12 +146,24 @@ namespace CopyBud
         {
             User32Wrapper.ChangeClipboardChain(this.Handle, _ClipboardViewerNext);
         }
-        public MainForm(HistoryRepository historyRepository)
+
+
+        public MainForm(HistoryRepository historyRepository, bool historyCleared = false)
         {
             this._historyRepository = historyRepository;
             this.ctlClipboardText = new RichTextBox();
             this.ClientSize = new System.Drawing.Size(292, 266);
             InitializeComponent();
+            this._historyCleared = historyCleared;
+            try
+            {
+                var recentHistory = _historyRepository.GetRecentHistory();
+                recentHistory.ToList().ForEach(h => this.ctlClipboardText.Text += $"{ h.ClipString} {Environment.NewLine}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format(Resources.ErrorStatic,ex));
+            }
         }
 
 
@@ -171,28 +181,19 @@ namespace CopyBud
             this.ctlClipboardText.Size = new System.Drawing.Size(721, 371);
             this.ctlClipboardText.TabIndex = 0;
             this.ctlClipboardText.Text = "";
-            try
-            {
-                var recentHistory = _historyRepository.GetRecentHistory();
-                recentHistory.ToList().ForEach(h => this.ctlClipboardText.Text += $"{ h.ClipString} {Environment.NewLine}");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error has occurred: {ex}");
-            }
-            
+
             // 
             // MainForm
             // 
             this.ClientSize = new System.Drawing.Size(722, 462);
             this.Controls.Add(this.ctlClipboardText);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";
             this.Text = "History";
-            this.FormClosing += new FormClosingEventHandler(this.MainFrm_FormClosing);
-            this.Load += new EventHandler(this.MainFrm_Load);
+            this.FormClosing += this.MainFrm_FormClosing;
+            this.Load += this.MainFrm_Load;
             this.ResumeLayout(false);
         }
 

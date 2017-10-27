@@ -15,6 +15,7 @@ namespace CopyBud
         private static readonly string IconFileName = "copy.ico";
         private static readonly string DefaultTooltip = "CopyBud";
         private readonly HistoryRepository _historyRepository;
+        private bool _isHistoryCleared;
         private MainForm _mainFrm;
         public CustomApplicationContext( HistoryRepository historyRepo )
             {
@@ -57,6 +58,7 @@ namespace CopyBud
                 try
                 {
                     _historyRepository.DeleteAll();
+                    _isHistoryCleared = true;
                 }
                 catch (Exception ex)
                 {
@@ -66,6 +68,7 @@ namespace CopyBud
                 if (_mainFrm != null && !_mainFrm.IsDisposed)
                 {
                     _mainFrm.ClearControls();
+                    
                 }
             }
         }
@@ -88,7 +91,7 @@ namespace CopyBud
             {
             if(_mainFrm == null || _mainFrm.IsDisposed)
                 {
-                _mainFrm = new MainForm(_historyRepository)
+                _mainFrm = new MainForm(_historyRepository,_isHistoryCleared)
                                 {
                                 Visible = true
                                 };
