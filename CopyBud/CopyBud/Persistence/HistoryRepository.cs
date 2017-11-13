@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CopyBud.Persistence
@@ -33,6 +34,11 @@ namespace CopyBud.Persistence
         {
             _dataContext.Database.ExecuteSqlCommand("DELETE FROM HISTORY");
             _dataContext.SaveChanges();
+        }
+
+        public List<History> Search( string criteria)
+        {
+            return _dataContext.Histories.Where(h => h.ClipString.ToUpper().Contains(criteria.ToUpper())).OrderByDescending(h => h.DateTimeTaken).ToList();
         }
     }
 }

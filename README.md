@@ -1,10 +1,10 @@
 # CopyBud
 Clipboard Manager
 ## Instructions
-When you compile the source code for the first time mark **data.db** to copy if newer then do not copy afterwards so the history will not be lost if you debug more than one time.
+Open in VS2017 and build
 ## ToDo
 * Custom icons.
 * Configuration.
-* Search History.
+* Search History (WIP).
 * Save History As.
 * Logging.
