@@ -82,6 +82,7 @@
     <Compile Include="Mutex\ProgramInfo.cs" />
     <Compile Include="Mutex\SingleInstance.cs" />
     <Compile Include="Persistence\DataContext.cs" />
+    <Compile Include="Persistence\DatabaseConfiguration.cs" />
     <Compile Include="Persistence\History.cs" />
     <Compile Include="Persistence\HistoryRepository.cs" />
     <Compile Include="MainFrm.cs">
@@ -110,7 +111,9 @@
     <EmbeddedResource Include="SearchFrm.resx">
       <DependentUpon>SearchFrm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="data.db" />
+    <None Include="data.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

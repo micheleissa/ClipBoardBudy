@@ -16,7 +16,25 @@ namespace CopyBud
         private readonly HistoryRepository _historyRepository;
         private bool _historyCleared;
 
-    private void MainFrm_Load(object sender, EventArgs e)
+
+        public MainForm(HistoryRepository historyRepository, bool historyCleared = false)
+            {
+            this._historyRepository = historyRepository;
+            this._historyCleared = historyCleared;
+            InitializeComponent();
+            try
+            {
+                var recentHistory = _historyRepository.GetRecentHistory();
+                recentHistory.ToList().ForEach(h => this.ctlClipboardText.Text += $"{ h.ClipString} {Environment.NewLine}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format(Resources.ErrorStatic, ex));
+            }
+        }
+
+
+        private void MainFrm_Load(object sender, EventArgs e)
         {
             RegisterClipboardViewer();
         }
@@ -30,10 +48,9 @@ namespace CopyBud
             // Data on the clipboard uses the 
             // IDataObject interface
             //
-            IDataObject iData = new DataObject();
             try
             {
-                iData = Clipboard.GetDataObject();
+                var iData = Clipboard.GetDataObject();
                 // 
                 // Get RTF/Text if it is present
                 //
@@ -147,24 +164,6 @@ namespace CopyBud
             User32Wrapper.ChangeClipboardChain(this.Handle, _ClipboardViewerNext);
         }
 
-
-        public MainForm(HistoryRepository historyRepository, bool historyCleared = false)
-        {
-            this._historyRepository = historyRepository;
-            this.ctlClipboardText = new RichTextBox();
-            this.ClientSize = new System.Drawing.Size(292, 266);
-            InitializeComponent();
-            this._historyCleared = historyCleared;
-            try
-            {
-                var recentHistory = _historyRepository.GetRecentHistory();
-                recentHistory.ToList().ForEach(h => this.ctlClipboardText.Text += $"{ h.ClipString} {Environment.NewLine}");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(string.Format(Resources.ErrorStatic,ex));
-            }
-        }
 
 
 

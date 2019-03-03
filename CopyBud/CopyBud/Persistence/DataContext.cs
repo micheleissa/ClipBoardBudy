@@ -11,13 +11,14 @@ namespace CopyBud.Persistence
 
         public DataContext() : base("dbConnection")
         {
+            //DbConfiguration.SetConfiguration(new DatabaseConfiguration());
             Database.SetInitializer<DataContext>(null);
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<SequenceTable>()
-                            .HasKey(s => s.Name)    
+                            .HasKey(s => s.Name)
                             .ToTable("sqlite_sequence");
 
             modelBuilder.Entity<History>().HasKey(h => h.Id);
