@@ -120,13 +120,13 @@ namespace CopyBud
             // 
             this.ResultRichTextBox.Location = new System.Drawing.Point(2, 72);
             this.ResultRichTextBox.Name = "ResultRichTextBox";
-            this.ResultRichTextBox.Size = new System.Drawing.Size(720, 324);
+            this.ResultRichTextBox.Size = new System.Drawing.Size(650, 350);
             this.ResultRichTextBox.TabIndex = 1;
             this.ResultRichTextBox.Text = "";
             // 
             // clearButton
             // 
-            this.clearButton.Location = new System.Drawing.Point(197, 419);
+            this.clearButton.Location = new System.Drawing.Point(200, 430);
             this.clearButton.Name = "clearButton";
             this.clearButton.Size = new System.Drawing.Size(75, 23);
             this.clearButton.TabIndex = 2;
@@ -136,7 +136,7 @@ namespace CopyBud
             // 
             // exportButton
             // 
-            this.exportButton.Location = new System.Drawing.Point(377, 419);
+            this.exportButton.Location = new System.Drawing.Point(320, 430);
             this.exportButton.Name = "exportButton";
             this.exportButton.Size = new System.Drawing.Size(75, 23);
             this.exportButton.TabIndex = 3;
@@ -149,7 +149,7 @@ namespace CopyBud
             this.AcceptButton = this.searchButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(722, 462);
+            this.ClientSize = new System.Drawing.Size(654, 461);
             this.Controls.Add(this.exportButton);
             this.Controls.Add(this.clearButton);
             this.Controls.Add(this.ResultRichTextBox);

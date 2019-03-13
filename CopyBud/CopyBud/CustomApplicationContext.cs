@@ -25,6 +25,10 @@ namespace CopyBud
         }
         private void InitializeContext()
         {
+            _mainFrm = new MainForm(_historyRepository)
+            {
+                Visible = false
+            };
             _components = new Container();
             _notifyIcon = new NotifyIcon(_components)
             {

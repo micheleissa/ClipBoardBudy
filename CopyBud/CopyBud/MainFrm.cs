@@ -18,7 +18,6 @@ namespace CopyBud
 
     private void MainFrm_Load(object sender, EventArgs e)
         {
-            RegisterClipboardViewer();
         }
 
         /// <summary>
@@ -39,11 +38,11 @@ namespace CopyBud
                 //
                 if (iData.GetDataPresent(DataFormats.Rtf) || iData.GetDataPresent(DataFormats.Text))
                 {
-                    var lastClipboard = (string)iData.GetData(DataFormats.Text);
-                    if (!_historyRepository.DoesHistoryExist(lastClipboard) && !_historyCleared)
+                    var lastClipboard = (string)iData.GetData(DataFormats.UnicodeText);
+                    if (!_historyRepository.DoesHistoryExist(lastClipboard) && !_historyCleared && lastClipboard != null)
                     {
                         ctlClipboardText.Text += $"{lastClipboard}{Environment.NewLine}";
-                        _historyRepository.AddHistory((string)iData.GetData(DataFormats.Text));
+                        _historyRepository.AddHistory(lastClipboard);
                     }
 
                 }
@@ -153,6 +152,7 @@ namespace CopyBud
             this._historyRepository = historyRepository;
             this.ctlClipboardText = new RichTextBox();
             this.ClientSize = new System.Drawing.Size(292, 266);
+            RegisterClipboardViewer();
             InitializeComponent();
             this._historyCleared = historyCleared;
             try
@@ -171,30 +171,28 @@ namespace CopyBud
 
         private void InitializeComponent()
         {
-            this.ctlClipboardText = new RichTextBox();
+            this.ctlClipboardText = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // ctlClipboardText
             // 
             this.ctlClipboardText.Location = new System.Drawing.Point(0, 0);
             this.ctlClipboardText.Name = "ctlClipboardText";
-            this.ctlClipboardText.Size = new System.Drawing.Size(721, 371);
+            this.ctlClipboardText.Size = new System.Drawing.Size(306, 371);
             this.ctlClipboardText.TabIndex = 0;
             this.ctlClipboardText.Text = "";
-
             // 
             // MainForm
             // 
-            this.ClientSize = new System.Drawing.Size(722, 462);
+            this.ClientSize = new System.Drawing.Size(306, 373);
             this.Controls.Add(this.ctlClipboardText);
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";
             this.Text = "History";
-            this.FormClosing += this.MainFrm_FormClosing;
-            this.Load += this.MainFrm_Load;
             this.ResumeLayout(false);
+
         }
 
         private void MainFrm_FormClosing(object sender, FormClosingEventArgs e)

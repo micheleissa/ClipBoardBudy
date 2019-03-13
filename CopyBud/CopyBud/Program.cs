@@ -20,6 +20,9 @@ namespace CopyBud
             }
             try
             {
+                var executable = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                var path = (System.IO.Path.GetDirectoryName(executable));
+                AppDomain.CurrentDomain.SetData("DataDirectory", path);
                 var ctx = new DataContext();
                 var historyRepo = new HistoryRepository(ctx);
                 Application.EnableVisualStyles();
