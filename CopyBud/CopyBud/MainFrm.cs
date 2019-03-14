@@ -181,12 +181,15 @@ namespace CopyBud
             this.ctlClipboardText.Size = new System.Drawing.Size(306, 371);
             this.ctlClipboardText.TabIndex = 0;
             this.ctlClipboardText.Text = "";
+            this.ctlClipboardText.KeyDown += this.ctlClipboardText_KeyDown;
+            this.ctlClipboardText.KeyPress += this.ctlClipboardText_KeyPress;
             // 
             // MainForm
             // 
             this.ClientSize = new System.Drawing.Size(306, 373);
+            this.ControlBox = false;
             this.Controls.Add(this.ctlClipboardText);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";
@@ -198,6 +201,22 @@ namespace CopyBud
         private void MainFrm_FormClosing(object sender, FormClosingEventArgs e)
         {
             UnregisterClipboardViewer();
+        }
+
+        private void ctlClipboardText_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                this.Visible = false;
+            }
+        }
+
+        private void ctlClipboardText_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Escape)
+            {
+                this.Visible = false;
+            }
         }
     }
 }

@@ -22,7 +22,7 @@ namespace CopyBud
             }
             this.ResultRichTextBox.Text = "";
             var result = _historyRepository.Search(this.searchTextBox.Text);
-            result.ForEach(x => this.ResultRichTextBox.Text += $"{x.ClipString}{System.Environment.NewLine}");
+            result.ForEach(x => this.ResultRichTextBox.Text += $"{x.ClipString}{Environment.NewLine}");
         }
 
         private void clearButton_Click(object sender, EventArgs e)

@@ -18,8 +18,10 @@ namespace CopyBud
         private bool _isHistoryCleared;
         private MainForm _mainFrm;
         private SearchFrm _searchFrm;
+        private bool _isShownFlag;
         public CustomApplicationContext(HistoryRepository historyRepo)
         {
+            this._isShownFlag = false;
             this._historyRepository = historyRepo;
             InitializeContext();
         }
@@ -38,7 +40,7 @@ namespace CopyBud
                 Visible = true
             };
             var exitMenuItem = new ToolStripMenuItem("&Exit");
-            var showHideMenuItem = new ToolStripMenuItem("&Show");
+            var showHideMenuItem = new ToolStripMenuItem("&Show / Hide");
             var clearHistoryMenuItem = new ToolStripMenuItem("&Clear History");
             var searchHistoryMenuItem = new ToolStripMenuItem("&Find");
             searchHistoryMenuItem.Click += SearchHistoryItem_Click;
@@ -105,17 +107,25 @@ namespace CopyBud
 
         private void ShowItem_Click(object sender, EventArgs e)
         {
-            if (_mainFrm == null || _mainFrm.IsDisposed)
+            if (_mainFrm != null && _isShownFlag && _mainFrm.Visible)
             {
-                _mainFrm = new MainForm(_historyRepository, _isHistoryCleared)
-                {
-                    Visible = true
-                };
+                _mainFrm.Visible = false;
             }
             else
             {
-                _mainFrm.Visible = true;
+                if (_mainFrm == null || _mainFrm.IsDisposed)
+                {
+                    _mainFrm = new MainForm(_historyRepository, _isHistoryCleared)
+                    {
+                        Visible = true
+                    };
+                }
+                else
+                {
+                    _mainFrm.Visible = true;
+                }
             }
+            this._isShownFlag = !this._isShownFlag;
         }
 
         private void ExitItem_Click(object sender, EventArgs e)
