@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using CopyBud.Persistence;
 using FluentAssertions;
@@ -13,9 +14,10 @@ namespace CopyBud.Tests
         [SetUp]
         public void Setup()
         {
+            DbConfiguration.SetConfiguration(new DbConfig(isTest: true));
             _dbContexMock = new DataContextMock<DataContext>();
             _dbContexMock.WithDbSetFrom(x => x.Histories, new List<History>());
-        _historyRepository = new HistoryRepository( _dbContexMock.Object );
+            _historyRepository = new HistoryRepository(_dbContexMock.Object);
         }
         [Test]
         public void Test_Add_History()
@@ -27,10 +29,10 @@ namespace CopyBud.Tests
 
         [TestCase(true)]
         [TestCase(false)]
-        public void Test_Does_History_Exist( bool exists)
+        public void Test_Does_History_Exist(bool exists)
         {
             var hist = "Test Clipboard";
-            if(exists) _historyRepository.AddHistory( hist );
+            if (exists) _historyRepository.AddHistory(hist);
             _historyRepository.DoesHistoryExist(hist).Should().Be(exists);
         }
     }

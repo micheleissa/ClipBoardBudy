@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.Infrastructure.Interception;
 using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace CopyBud.Persistence
@@ -12,6 +13,11 @@ namespace CopyBud.Persistence
         public DataContext() : base("dbConnection")
         {
             Database.SetInitializer<DataContext>(null);
+            DbInterception.Add(new SqliteInterceptor());
+            
+            #if DEBUG
+                this.Database.Log = (l) => Debug.WriteLine(l);
+            #endif
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

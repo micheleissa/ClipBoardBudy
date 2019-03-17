@@ -171,7 +171,7 @@ namespace CopyBud
 
         private void InitializeComponent()
         {
-            this.ctlClipboardText = new System.Windows.Forms.RichTextBox();
+            this.ctlClipboardText = new RichTextBox();
             this.SuspendLayout();
             // 
             // ctlClipboardText

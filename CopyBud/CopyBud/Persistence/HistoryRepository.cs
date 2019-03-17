@@ -38,7 +38,7 @@ namespace CopyBud.Persistence
 
         public List<History> Search( string criteria)
         {
-            return _dataContext.Histories.Where(h => h.ClipString.ToUpper().Contains(criteria.ToUpper())).OrderByDescending(h => h.DateTimeTaken).ToList();
+            return _dataContext.Histories.Where(h => h.ClipString.Contains(criteria)).OrderByDescending(h => h.DateTimeTaken).ToList();
         }
     }
 }
